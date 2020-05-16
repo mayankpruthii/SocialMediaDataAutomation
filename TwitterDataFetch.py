@@ -62,14 +62,14 @@ def TwitterDataFetch():
     myDict = {}
 
     myDict['Date'] = str(date.today())
-    myDict['Impressions'] = float(impressions)
+    myDict['Impressions(per thousands)'] = float(impressions)
     myDict['Engagement Rate'] = float(engagement_rate[0:3])
     myDict['Link Clicks'] = int(link_clicks)
     myDict['Retweets'] = int(retweets)
     myDict['Likes'] = int(likes)
     myDict['Replies'] = int(replies)
     myDict['Posts'] = posts
-    myDict['Followers'] = followers
+    myDict['Followers(Monthly)'] = followers
     
     return myDict
 
