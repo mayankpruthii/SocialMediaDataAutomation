@@ -57,6 +57,7 @@ def TwitterDataFetch():
     auth.set_access_token(key, secret)
     api = tweepy.API(auth)
     followers = api.me().followers_count
+    posts = api.me().statuses_count
 
     myDict = {}
 
@@ -67,7 +68,8 @@ def TwitterDataFetch():
     myDict['Retweets'] = int(retweets)
     myDict['Likes'] = int(likes)
     myDict['Replies'] = int(replies)
+    myDict['Posts'] = posts
     myDict['Followers'] = followers
-
+    
     return myDict
 
