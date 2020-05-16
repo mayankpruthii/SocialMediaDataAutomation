@@ -12,7 +12,7 @@ with open('./Cred.json') as f:
 
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/spreadsheets' ,'https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/drive']
 
-credentials = ServiceAccountCredentials.from_json_keyfile_name('nyaayadataweb-6c90e95fed05.json', scope)
+credentials = ServiceAccountCredentials.from_json_keyfile_name('myGoogleAPI.json', scope)
 
 gc = gspread.authorize(credentials)
 
