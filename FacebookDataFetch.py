@@ -76,9 +76,9 @@ def FacebookInsightsHindiSite():
     response_h1 = requests.get(url_h1)
     response_h2 = requests.get(url_h2)
 
-    # print(response_h)
-    # print(response_h1)
-    # print(response_h2)
+    print(response_h)
+    print(response_h1)
+    print(response_h2)
 
     jsonResponse_h = response_h.json()
     jsonResponse_h1 = response_h1.json()
