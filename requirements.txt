@@ -3,7 +3,7 @@ chardet==3.0.4
 dictsheet==0.0.11
 future==0.15.2
 gspread==0.4.1
-httplib2==0.9.2
+httplib2==0.18.0
 idna==2.10
 mxnet-cu92==1.5.0
 oauth2client==2.2.0
