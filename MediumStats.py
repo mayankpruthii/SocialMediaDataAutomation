@@ -35,15 +35,17 @@ class MyMediumStats:
 
         loginName = driver.find_element_by_name('identifier')
         loginName.send_keys(data['Medium']['emailID'])
-        nextButton = driver.find_element_by_xpath('//*[@id="identifierNext"]/span/span')
-        nextButton.click()
+        nextButton = driver.find_element_by_xpath("//*[text()='Next']")
+        driver.execute_script("arguments[0].click();", nextButton)
+        # nextButton.click()
 
         time.sleep(2)
 
         passwordEnter = driver.find_element_by_xpath('//*[@id="password"]/div[1]/div/div[1]/input')
         passwordEnter.send_keys(data['Medium']['password'])
-        nextButton2 = driver.find_element_by_xpath('//*[@id="passwordNext"]/span/span')
-        nextButton2.click()
+        nextButton2 = driver.find_element_by_xpath("//*[text()='Next']")
+        driver.execute_script("arguments[0].click();", nextButton2)
+        # nextButton2.click()
 
         time.sleep(10)
 
@@ -88,7 +90,7 @@ class MyMediumStats:
             myDict['Views'] = post['views']
             myDict['Reads'] = post['reads']
             myDict['Reading time'] = post['readingTime']
-            read_ratio = (post['reads']/post['views']) * 100
+            read_ratio = (post['reads'] / post['views']) * 100
             myDict['Read Ratio'] = int(read_ratio)
             myList.append(myDict)
 
