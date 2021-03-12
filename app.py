@@ -58,35 +58,3 @@ dict_InstagramWks = DictSheet(wks = InstagramWks)
 dict_InstagramWks.append(instagram_data)
 
 print('Done!')
-
-# ###########################################################
-
-# # Medium Data Automation
-# # medium = MyMediumStats()
-# # # Runs Scraper
-# # medium.MediumStatsScraper()
-
-# # # Overview Stats for medium
-# # medium_overview_data = medium.MediumOverviewStats()
-# # print(medium_overview_data)
-# # mediumWks = my_spreadsheet.worksheet('Medium')
-# # dict_mediumWks = DictSheet(wks = mediumWks)
-# # dict_mediumWks.append(medium_overview_data)
-
-# # # Posts stats
-# # medium_post_stats = medium.MediumPostsStats()
-# # # print(medium_post_stats)
-# # mediumPostWks = my_spreadsheet.worksheet('MediumPosts')
-# # # mediumPostWks.values_clear("A2:J10000")
-# # dict_mediumPostsWks = DictSheet(wks = mediumPostWks)
-# # # for i in range(2,100):
-# # #     dict_mediumPostsWks[i].clear()
-# # #     print(i)
-
-# # for item in medium_post_stats:
-# #     print(item)
-# #     dict_mediumPostsWks.append(item)
-
-# # print('Medium data automation Done!')
-
-# ###########################################################
