@@ -1,5 +1,29 @@
 import requests
 import json
+import time
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
+# this function is not needed anymore
+def InstagramScraping():
+    with open('./Cred.json') as f:
+        data = json.load(f)
+
+    chrome_options = Options()
+    chrome_options.add_argument("--incognito")
+    driver = webdriver.Chrome('./chromedriver.exe')
+
+    driver.get('https://www.tanke.fr/en/instagram-engagement-rate-calculator-2/')
+    time.sleep(2)
+
+    instaId = driver.find_element_by_name('pseudo')
+    instaId.send_keys('nyaayaorg')
+    analyseButton = driver.find_element_by_xpath('//*[@id="pseudoform"]/p[2]/input')
+    analyseButton.click()
+    time.sleep(5)
+    engagementRate = driver.find_element_by_id('engrate').text
+    return engagementRate
+
 
 def InstagramInsights():
     with open('./Cred.json') as f:
@@ -20,14 +44,16 @@ def InstagramInsights():
     response_i2 = requests.get(url_i2)
     response_i3 = requests.get(url_i3)
 
-    print(response_i1)
-    print(response_i2)
-    print(response_i3)
+    # print(response_i1)
+    # print(response_i2)
+    # print(response_i3)
 
     jsonResponse_i1 = response_i1.json()
     jsonResponse_i2 = response_i2.json()
     jsonResponse_i3 = response_i3.json()
+    print(jsonResponse_i1)
     print(jsonResponse_i2)
+    print(jsonResponse_i3)
 
     myDict_i = {}
 
@@ -42,5 +68,34 @@ def InstagramInsights():
 
     myDict_i['Total Followers'] = jsonResponse_i2['followers_count']
     myDict_i['Total Posts'] = jsonResponse_i3['business_discovery']['media_count']
-
+    # engagementRate = InstagramScraping()
+    # myDict_i['Engagement Rate'] = engagementRate
+    url_i4 = 'https://graph.facebook.com/v10.0/'+user_id_i+'/media?access_token='+user_access_token_i
+    response_i4 = requests.get(url_i4)
+    # print(response_i4)
+    jsonResponse_i4 = response_i4.json()
+    print(jsonResponse_i4)
+    instagram_posts_ids = jsonResponse_i4['data']
+    i = 0
+    engagement_sum = 0
+    for id in instagram_posts_ids:
+        if(i < 5):
+            i += 1
+            continue
+        insta_id = id['id']
+        insta_media_url = "https://graph.facebook.com/v10.0/"+str(insta_id)+"/insights?metric=engagement&access_token="+user_access_token_i
+        insta_media_response = requests.get(insta_media_url)
+        jsonResponse_insta_media = insta_media_response.json()
+        # print(jsonResponse_insta_media)
+        engagement_sum += jsonResponse_insta_media['data'][0]['values'][0]['value']
+        i += 1
+    # return myDict_i
+    total_engagement = engagement_sum / 200
+    print(total_engagement)
+    myDict_i['Engagement Rate'] = total_engagement
+    # print("MyInstaData")
+    # print(myDict_i)
     return myDict_i
+
+if __name__=="__main__":
+    InstagramInsights()

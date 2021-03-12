@@ -5,3 +5,4 @@ __init__.py
 build
 dist
 *.log
+chromedriver.exe

@@ -17,11 +17,13 @@ def TwitterDataFetch():
 
     driver.get('https://analytics.twitter.com/user/NyaayaIN/home')
 
+    time.sleep(3)
+
     loginName = driver.find_element_by_name('session[username_or_email]')
     loginName.send_keys(data['Twitter'][0]['Scrape']['loginUsername'])
     password = driver.find_element_by_name('session[password]')
     password.send_keys(data['Twitter'][0]['Scrape']['password'])
-    loginButton = driver.find_element_by_xpath('//*[@id="react-root"]/div/div/div[2]/main/div/div/div[1]/form/div/div[3]/div/div/span/span')
+    loginButton = driver.find_element_by_xpath('//*[@id="react-root"]/div/div/div[2]/main/div/div/div[2]/form/div/div[3]/div/div/span')
     loginButton.click()
 
     time.sleep(2)
