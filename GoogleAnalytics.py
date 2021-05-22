@@ -1,11 +1,13 @@
+#######################################################################
+# THIS MODULE IS NOT UPDATED
+#######################################################################
+
 from googleapiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
-
 
 SCOPES = ['https://www.googleapis.com/auth/analytics.readonly']
 KEY_FILE_LOCATION = './googleAnalytics.json'
 VIEW_ID = '221800720'
-
 
 def initialize_analyticsreporting():
   

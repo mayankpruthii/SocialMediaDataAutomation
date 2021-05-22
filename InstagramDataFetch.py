@@ -4,27 +4,6 @@ import time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-# this function is not needed anymore
-def InstagramScraping():
-    with open('./Cred.json') as f:
-        data = json.load(f)
-
-    chrome_options = Options()
-    chrome_options.add_argument("--incognito")
-    driver = webdriver.Chrome('./chromedriver.exe')
-
-    driver.get('https://www.tanke.fr/en/instagram-engagement-rate-calculator-2/')
-    time.sleep(2)
-
-    instaId = driver.find_element_by_name('pseudo')
-    instaId.send_keys('nyaayaorg')
-    analyseButton = driver.find_element_by_xpath('//*[@id="pseudoform"]/p[2]/input')
-    analyseButton.click()
-    time.sleep(5)
-    engagementRate = driver.find_element_by_id('engrate').text
-    return engagementRate
-
-
 def InstagramInsights():
     with open('./Cred.json') as f:
         data = json.load(f) 
@@ -43,10 +22,6 @@ def InstagramInsights():
     response_i1 = requests.get(url_i1)
     response_i2 = requests.get(url_i2)
     response_i3 = requests.get(url_i3)
-
-    # print(response_i1)
-    # print(response_i2)
-    # print(response_i3)
 
     jsonResponse_i1 = response_i1.json()
     jsonResponse_i2 = response_i2.json()
@@ -89,13 +64,107 @@ def InstagramInsights():
         # print(jsonResponse_insta_media)
         engagement_sum += jsonResponse_insta_media['data'][0]['values'][0]['value']
         i += 1
-    # return myDict_i
     total_engagement = engagement_sum / 200
     print(total_engagement)
     myDict_i['Engagement Rate'] = total_engagement
-    # print("MyInstaData")
-    # print(myDict_i)
     return myDict_i
 
+def InstagramPostInsights():
+    with open('./Cred.json') as f:
+        data = json.load(f) 
+   
+    postIds = []
+    user_access_token_i = data['Instagram']['UserAccessToken']  
+    user_id_i = data['Instagram']['UserID']
+    urlPosts = 'https://graph.facebook.com/v10.0/'+user_id_i+'/media?access_token='+user_access_token_i
+    
+    response = requests.get(urlPosts)
+    jsonResponse = response.json()
+    count = 0
+    for postId in jsonResponse["data"]:
+        if(count < 10):
+            count += 1
+            continue
+        postIds.append(postId)
+    
+    nextDataUrl1 = jsonResponse["paging"]["next"]
+    response2 = requests.get(nextDataUrl1)
+    jsonResponse2 = response2.json()
+    for postId in jsonResponse2["data"]:
+        postIds.append(postId)
+    
+    nextDataUrl2 = jsonResponse2["paging"]["next"]
+    response3 = requests.get(nextDataUrl2)
+    jsonResponse3 = response3.json()
+    for postId in jsonResponse3["data"]:
+        postIds.append(postId)
+
+    nextDataUrl3 = jsonResponse3["paging"]["next"]
+    response4 = requests.get(nextDataUrl3)
+    jsonResponse4 = response4.json()
+    for postId in jsonResponse4["data"]:
+        postIds.append(postId)
+
+    postInfoDict = []
+    count = 0
+    for postId in postIds:
+        postInfoSingle = {}
+        postAboutUrl = "https://graph.facebook.com/v10.0/"+postId["id"]+"?fields=timestamp,media_url,caption,media_type,comments_count,like_count,media_product_type&access_token="+user_access_token_i
+        postInsightsUrl = "https://graph.facebook.com/v10.0/"+postId["id"]+"/insights?metric=engagement,impressions,reach,saved&access_token="+user_access_token_i
+        
+        aboutPostResponse = requests.get(postAboutUrl)
+        print(aboutPostResponse)
+        jsonAboutPost = aboutPostResponse.json()
+        # print(jsonAboutPost)
+        postInfoSingle["Post Type"] = jsonAboutPost["media_product_type"]
+        postInfoSingle["Timestamp"] = jsonAboutPost["timestamp"]
+        postInfoSingle["Media Url"] = jsonAboutPost["media_url"]
+        postInfoSingle["Caption"] = jsonAboutPost["caption"][0:10]
+        postInfoSingle["Media Type"] = jsonAboutPost["media_type"]
+        postInfoSingle["Comments"] = jsonAboutPost["comments_count"]
+        postInfoSingle["Likes"] = jsonAboutPost["like_count"]
+
+        postInsightsResponse = requests.get(postInsightsUrl)
+        print(postInsightsResponse)
+        jsonPostInsights = postInsightsResponse.json()
+        # print(jsonPostInsights)
+        postInfoSingle["Impressions"] = jsonPostInsights["data"][1]["values"][0]["value"] 
+        postInfoSingle["Reach"] = jsonPostInsights["data"][2]["values"][0]["value"] 
+        postInfoSingle["Post Saved"] = jsonPostInsights["data"][3]["values"][0]["value"] 
+        postInfoSingle["Engagements"] = jsonPostInsights["data"][0]["values"][0]["value"] 
+
+        postInfoDict.append(postInfoSingle)
+        count += 1
+        print(count)
+
+    return postInfoDict
+
+
 if __name__=="__main__":
-    InstagramInsights()
+    InstagramPostInsights()
+
+
+
+####################################################################
+# this function is not needed anymore
+####################################################################
+# def InstagramScraping():
+#     with open('./Cred.json') as f:
+#         data = json.load(f)
+
+#     chrome_options = Options()
+#     chrome_options.add_argument("--incognito")
+#     driver = webdriver.Chrome('./chromedriver.exe')
+
+#     driver.get('https://www.tanke.fr/en/instagram-engagement-rate-calculator-2/')
+#     time.sleep(2)
+
+#     instaId = driver.find_element_by_name('pseudo')
+#     instaId.send_keys('nyaayaorg')
+#     analyseButton = driver.find_element_by_xpath('//*[@id="pseudoform"]/p[2]/input')
+#     analyseButton.click()
+#     time.sleep(5)
+#     engagementRate = driver.find_element_by_id('engrate').text
+#     return engagementRate
+
+
